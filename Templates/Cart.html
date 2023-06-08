@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cart</title>
+    <style>
+        body {
+            padding-top: 40px;
+            text-align: center;
+            color: #FFFFFF;
+            background-color: #F8F8FF;
+        }
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            font-family: Georgia, serif;
+            background-color: #f1f1f1;
+            overflow: hidden;
+        }
+        .navbar a {
+            float: left;
+            display: block;
+            color: #333;
+            font-family: Georgia, serif;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        .navbar a.right {
+            float: right;
+        }
+        .navbar a:hover {
+            background-color: #333;
+            color: white;
+        }
+        .product-image {
+            width: 250px;
+            height: 250px;
+            margin-left: 1px;
+            margin-right: auto;
+            border: 3px solid white;
+            border-radius: 50px;
+        }
+        .product-container {
+            display: flex;
+            flex-direction: row;
+            margin-left: 0px;
+            margin-right: 500px;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 10px;
+            margin-top: 20px;
+            border-radius: 50px;
+            background-color: #336699;
+            border-color: #00008B;
+            border-width: 5px;
+        }
+        .product-details {
+            display: flex;
+            flex-direction: column;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: auto;
+            margin-top: auto;
+            color: black;
+        }
+        .product-name-box {
+            background-color: #00008B;
+            padding: 10px;
+            width: 550px;
+            height: 20px;
+            margin-bottom: 10px;
+            margin-left: 0px;
+            border-radius: 25px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+       
+        .product-name { 
+            font-size: 20px;
+            color: #FFFFFF;
+            font-family: Andale Mono, monospace;
+            text-align: left;
+            width: 100%;
+        }
+         .product-price-box {
+            background-color: #00008B;
+            padding: 10px;
+            width: 550px;
+            height: 45px;
+            margin-left: 0px;
+            border-radius: 25px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .product-price {
+            font-size: 20px;
+            color: #FFFFFF;
+            text-align: left;
+            font-family: Andale Mono, monospace;
+            width: 100%;
+        }
+        input[type="submit"] {
+            background-color: #00008B;
+            color: #FFFFFF;
+            font-size: 20px;
+            padding: 10px;
+            font-family: Andale Mono, monospace;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 20px;
+            margin-left: 330px;
+            margin-right: auto;
+        }
+        input[type="submit"]:hover{
+            background-color: #f1f1f1;
+            color: black;
+        }
+        label {
+            display: inline-block;
+            margin-right: -13px;
+            font-family: Andale Mono, monospace;
+            font-size: 20px;
+            color: #FFFFFF;
+        }
+        input[type="number"] {
+            width: 60px;
+            height: 35px;
+            padding: 5px;
+            margin-left: 10px;
+            font-family: Andale Mono, monospace;
+            border: 0px solid #FFFFFF;
+            border-radius: 5px;
+            font-size: 16px;
+            text-align: center;
+            color: #FFFFFF;
+            background-color: #00008B;
+            border-radius: 25px;
+        }
+        form[action="/remove_from_cart"] {
+            display: inline-block;
+            margin-left: 50px;
+        }
+        .dash {
+            position: fixed;
+            top: 66px;
+            right: 7px;
+            width: 455px;
+            height: 235px;
+            padding: 20px;
+            background-color: #336699;
+            border-radius: 50px;
+        }
+        .total-cost {
+            margin: 10px 0;
+            height: 100px;
+            padding: 10px;
+            font-size: 20px;
+            font-family: Andale Mono, monospace;
+            color: white;
+            background-color: #00008B;
+            border: none;
+            border-radius: 25px;
+        }
+
+        .purchase-button{
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 20px;
+            margin-top: 30px;
+            font-family: Andale Mono, monospace;
+            color: white;
+            background-color: #00008B;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            }
+
+        .continue-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 20px;
+            margin-top: 30px;
+            font-family: Andale Mono, monospace;
+            color: white;
+            background-color: #00008B;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            }
+            
+        .purchase-button:hover, .continue-button:hover {
+            background-color: #f1f1f1;
+            color: black;
+            cursor: pointer;
+            }
+            
+        .purchase-button {
+            cursor: pointer;
+         }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a>Orang Shop</a>
+        <a href="/logout" class="right">Logout</a>
+    </div>
+
+    {% for item in cart %}
+    <div class="product-container">
+       <img class="product-image" src="/static/uploads/{{item.image}}" alt="Product Image">
+       <div class="product-details">
+           <div class="product-name-box">
+               <div class="product-name">Name:   {{ item.name }}</div>
+           </div>
+           <div class="product-price-box">
+               <br>
+               <div class="product-price">Price:   {{ item.price }} $  |  {{ item.gheymat}} IRR</div>
+           </div>
+           <form action="/update_quantity" method="post">
+               <input type="hidden" name="product_name" value="{{ item.name }}">
+               <label for="quantity_input">Quantity:</label>
+               <input type="number" id="quantity_input" name="quantity" min="1" value="{{ item.quantity }}">
+               <input type="submit" value="Update">
+           </form>
+           <form action="/remove_from_cart" method="post">
+               <input type="hidden" name="product_name" value="{{ item.name }}">
+               <input type="submit" value="Remove from Cart">
+           </form>
+       </div>
+    </div>
+    {% endfor %}
+
+
+<div class="dash">
+    <div class="total-cost">
+      Total Cost: {{total_cost}} $ <br>
+      <br> Majmooe Pardakht: {{total_gheymat}} IRR
+    </div>
+    <a href="/purchased" class="purchase-button">Purchase</a>
+    <a href="/buyer_dashboard" class="continue-button">Continue Shopping</a>
+    <div id="flashMessages">
+        {% with messages = get_flashed_messages(category_filter=['update']) %}
+            {% for message in messages %}
+                <div class="flashMessage">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+    </div>
+
+    <div id="flashMessages">
+        {% with messages = get_flashed_messages(category_filter=['remove']) %}
+            {% for message in messages %}
+                <div class="flashMessage">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+    </div>
+
+    <div id="flashMessages">
+        {% with messages = get_flashed_messages(category_filter=['purchase']) %}
+            {% for message in messages %}
+                <div class="flashMessage">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+    </div>
+
+    <div id="flashMessages">
+        {% with messages = get_flashed_messages(category_filter=['empty']) %}
+            {% for message in messages %}
+                <div class="flashMessage">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+    </div>
+
+
+
+    <style>
+        .flashMessage {
+            background-color: #f1f1f1;
+            font-family: Arial, sans-serif;
+            width: 400px;
+            color: black;
+            font-size: 18px;
+            padding: 10px;
+            margin-left: 15px;
+            margin-top: 50px;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid black;
+            border-radius: 25px
+        }
+    </style>
+
+    <script>
+        // Function to show the flash messages at the bottom of the page
+        function showFlashMessages() {
+            var flashContainer = document.getElementById('flashMessages');
+            flashContainer.style.display = 'block';
+        }
+
+        // Check if flash messages exist and show them at the bottom of the page
+        showFlashMessages();
+    </script>
+
+</div>
+</body>
+</html>

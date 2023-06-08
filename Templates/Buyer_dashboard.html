@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Buyer Dashboard</title>
+    <style>
+        #box {
+            margin: 40px auto;
+            max-width: 800px;
+            border: 2px solid white;
+            padding: 20px;
+            background-color: #336699;
+            border-radius: 100px;
+        }
+        .content {
+            margin-top: 20px;
+        }
+        body {
+            padding-top: 40px;
+            text-align: center;
+            color: #FFFFFF;
+            background-color: #F8F8FF;
+        }
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            font-family: Georgia, serif;
+            width: 100%;
+            background-color: #f1f1f1;
+            overflow: hidden;
+        }
+        .navbar a {
+            float: left;
+            display: block;
+            color: #333;
+            font-family: Georgia, serif;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        .navbar a.right {
+            float: right;
+        }
+        .navbar a:hover {
+            background-color: #333;
+            color: white;
+        }
+        .product-image {
+            width: 250px;
+            height: 250px;
+            margin-left: 1px;
+            margin-right: auto;
+            border: 3px solid white;
+            border-radius: 50px;
+        }
+        .product-container {
+            display: flex;
+            flex-direction: row;
+            margin-left: 250px;
+            margin-right: 250px;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 50px;
+            background-color: #336699;
+            border-color: #00008B;
+            border-width: 5px;
+        }
+        .product-details {
+            display: flex;
+            flex-direction: column;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: auto;
+            margin-top: auto;
+            color: black;
+        }
+        .product-name-box {
+            background-color: #00008B;
+            padding: 10px;
+            width: 550px;
+            height: 20px;
+            margin-bottom: 10px;
+            margin-left: 0px;
+            border-radius: 25px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+       
+        .product-name { 
+            font-size: 20px;
+            color: #FFFFFF;
+            font-family: Andale Mono, monospace;
+            text-align: left;
+            width: 100%;
+        }
+         .product-price-box {
+            background-color: #00008B;
+            padding: 10px;
+            width: 550px;
+            height: 45px;
+            margin-left: 0px;
+            border-radius: 25px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .product-price {
+            font-size: 20px;
+            color: #FFFFFF;
+            font-family: Andale Mono, monospace;
+            text-align: left;
+            width: 100%;
+        }
+        input[type="submit"] {
+            background-color: #00008B;
+            color: #FFFFFF;
+            font-size: 20px;
+            font-family: Andale Mono, monospace;
+            padding: 10px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 20px;
+            margin-left: 250px;
+            margin-right: auto;
+        }
+        label {
+            display: inline-block;
+            margin-right: -13px;
+            font-family: Andale Mono, monospace;
+            font-size: 20px;
+            color: #FFFFFF;
+        }
+        input[type="number"] {
+            width: 60px;
+            height: 35px;
+            padding: 5px;
+            font-family: Andale Mono, monospace;
+            margin-left: 10px;
+            border: 0px solid #FFFFFF;
+            border-radius: 5px;
+            font-size: 16px;
+            text-align: center;
+            color: #FFFFFF;
+            background-color: #00008B;
+            border-radius: 25px;
+        }
+        input[type="submit"]:hover{
+            background-color: #f1f1f1;
+            color: black;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a>Orang Shop</a>
+        <a href="/cart" class="cart-button">View Cart</a>
+        <a href="/logout" class="right">Logout</a>
+    </div>
+
+    <div class="content" id="box">
+        <h1>Buyer Dashboard</h1>
+        <h2>Available Products</h2>
+    </div>
+
+    <div id="flashMessages">
+        {% with messages = get_flashed_messages(category_filter=['buyer_dashboard']) %}
+            {% for message in messages %}
+                <div class="flashMessage">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+    </div>
+
+
+    <style>
+        .flashMessage {
+            background-color: #f1f1f1;
+            font-family: Arial, sans-serif;
+            width: 400px;
+            color: black;
+            font-size: 18px;
+            padding: 10px;
+            margin-left: 550px;
+            margin-bottom: 40px;
+            align-items: center;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid black;
+            border-radius: 25px
+        }
+    </style>
+
+    <script>
+        // Function to show the flash messages at the bottom of the page
+        function showFlashMessages() {
+            var flashContainer = document.getElementById('flashMessages');
+            flashContainer.style.display = 'block';
+        }
+
+        // Check if flash messages exist and show them at the bottom of the page
+        showFlashMessages();
+    </script>
+
+    {% for product in products %}
+    <div class="product-container">
+       <img class="product-image" src="/static/uploads/{{product.image}}" alt="Product Image">
+       <div class="product-details">
+           <div class="product-name-box">
+               <div class="product-name">Name:   {{ product.name }}</div>
+           </div>
+           <div class="product-price-box">
+               <br>
+               <div class="product-price">Price:   {{ product.price }} $  |  {{ product.gheymat}} IRR</div>
+           </div>
+           <form action="/add_to_cart" method="post">
+               <input type="hidden" name="product_name" value="{{ product.name }}">
+               <label for="quantity_input">Quantity:</label>
+               <input type="number" id="quantity_input" name="quantity" min="1" value="1">
+               <input type="submit" value="Add to Cart">
+           </form>
+       </div>
+    </div>
+    {% endfor %}
+</body>
+</html>
+
