@@ -114,6 +114,185 @@ def seller_dashboard():
 
     return redirect('/login')
 
+
+@app.route('/seller_dashboard_add')
+def seller_dashboard_add():
+    if 'username' in session and session['role'] == 'seller':
+        seller_products = []  # List to store products specific to the seller
+
+        # Fetch products specific to the seller from the global products list
+        for product in products:
+            if product['seller'] == session['username']:
+                seller_products.append(product)
+
+        return render_template('seller_dashboard_add.html', products=seller_products)
+
+    return redirect('/login')
+
+
+@app.route('/Add_product_seller', methods=['GET', 'POST'])
+def add_product_seller():
+    if 'username' in session and session['role'] == 'seller':
+        if request.method == 'POST':
+            # Extract product data from the form
+            name = request.form['name']
+            price = float(request.form['price'])
+            image = request.files['image']
+
+            # Save the uploaded image and retrieve the filename
+            filename = secure_filename(image.filename)
+            image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+            # Create a new product dictionary
+            product = {
+                'name': name,
+                'price': price,
+                'image': filename,
+                'seller': session['username'],  # Store the seller's username
+                'gheymat': (price*curruncy_index)
+
+            }
+
+            if any(p['name'] == product['name'] for p in products):
+                flash('Product already exists')
+            else:
+                # Append the new product to the global products list
+                products.append(product)
+
+            img = url_for('static', filename='uploads/' + filename)
+            return redirect('/seller_dashboard_add')
+
+        return render_template('add_product.html')
+
+    return redirect('/login')
+
+
+@app.route('/remove_product_seller/<product_name>', methods=['POST'])
+def remove_product_seller(product_name):
+    if 'username' in session and session['role'] == 'seller':
+        # Find the product in the products list by name
+        for product in products:
+            if product['name'] == product_name and product['seller'] == session['username']:
+                products.remove(product)
+                break
+
+        if products==[]:
+            return redirect('/seller_dashboard')
+        
+        else:
+            return redirect('/seller_dashboard_add')
+
+    return redirect('/login')
+
+
+@app.route('/buyer_dashboard')
+def buyer_dashboard():
+    if 'username' in session and session['role'] == 'buyer':
+        all_products = products
+        return render_template('buyer_dashboard.html', cart=cart, products=all_products)
+    return redirect('/login')
+
+
+@app.route('/add_to_cart', methods=['POST'])
+def add_to_cart():
+    if 'username' in session and session['role'] == 'buyer':
+        if request.method == 'POST':
+            product_name = request.form['product_name']
+            quantity = request.form['quantity']
+            
+            # Find the product in the products list using the product_name
+            product = next((p for p in products if p['name'] == product_name), None)
+            
+            if product:
+                # Create a cart_item dictionary with the product details and quantity
+                cart_item = {
+                    'name': product['name'],
+                    'price': product['price'],
+                    'quantity': quantity,
+                    'image': product['image'], # Add the image information
+                    'buyer': session['username'],
+                    'gheymat': product['gheymat']
+                }
+                
+                # Add the cart_item to the buyer's cart
+                cart.append(cart_item)
+                
+                flash('Product added to your cart', 'buyer_dashboard')
+                return redirect('/buyer_dashboard')
+            
+            else:
+                flash('Invalid product')
+        
+        return redirect('/buyer_dashboard')
+    return redirect('/login')
+
+
+@app.route('/cart')
+def buyer_cart():
+    if 'username' in session and session['role'] == 'buyer':
+        buyer_products = []
+        total_cost = 0
+        for product in cart:
+            if product['buyer'] == session['username']:
+                buyer_products.append(product)
+                total_cost += int(product['quantity'])*float(product['price'])
+
+        total_gheymat = (float(total_cost)*curruncy_index)
+        session['buyer_products'] = buyer_products  # Store buyer_products in session
+        session['total_cost'] = total_cost
+
+        return render_template('Cart.html',total_cost=total_cost , total_gheymat=total_gheymat,cart=buyer_products, curruncy_index=curruncy_index)
+    return redirect('/login')
+
+
+@app.route('/remove_from_cart', methods=['POST'])
+def remove_from_cart():
+    if 'username' in session and session['role'] == 'buyer':
+        if request.method == 'POST':
+            product_name = request.form['product_name']
+            cart[:] = [item for item in cart if item['name'] != product_name]
+
+        flash('Product removed', 'remove')
+        return redirect('/cart')
+    return redirect('/login')
+
+
+@app.route('/update_quantity', methods=['POST'])
+def update_quantity():
+    if 'username' in session and session['role'] == 'buyer':
+        if request.method == 'POST':
+            product_name = request.form['product_name']
+            quantity = int(request.form['quantity'])
+            
+            # Find the product in the buyer's cart
+            for item in cart:
+                if item['name'] == product_name:
+                    item['quantity'] = quantity
+                    break            
+            flash('Quantity updated', 'update')
+        
+        return redirect('/cart')
+    return redirect('/login')
+
+
+@app.route('/purchased')
+def purchase():
+    if cart==[]:
+            flash('Please add product to your cart!', 'empty')
+            return redirect('/cart')
+    
+    else:       
+        if 'username' in session and session['role'] == 'buyer':
+            buyer_products = session.pop('buyer_products', [])  # Retrieve and clear buyer_products from session
+
+            # Remove purchased products from the cart
+            cart[:] = [item for item in cart if item not in buyer_products]
+            flash('Thank you! Purchase was Successful.', 'purchase')
+            return redirect('/cart')
+
+    return redirect('/login')
+
+
 @app.route("/logout")
 def logout():
 
