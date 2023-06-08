@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <style>
+        #login-box {
+            margin: 0 auto;
+            max-width: 500px;
+            border: 1px solid #ccc;
+            padding: 20px;
+            background-color: #336699;
+            border-radius: 50px;
+        }
+        p {
+            border: 0.01px solid black;
+            border-radius: 5px;
+            margin-top: 5px;
+            margin-bottom: 50px;
+            margin-right: 100px;
+            margin-left: 100px;
+            background-color: #FFFFFF;
+            background-attachment: fixed;
+        }
+        body {
+            text-align: center;
+            padding: 50px;
+            background-color: #F8F8FF;
+        }
+        h1 {
+            font-size: 50px;
+            color: #FFFFFF;
+            
+        }
+        label[for="username"] {
+            font-family: Andale Mono, monospace;
+            color: #FFFFFF;
+            font-size: 20px;
+        }
+        label[for="password"] {
+            font-family: Andale Mono, monospace;
+            color: #FFFFFF;
+            font-size: 20px;
+        }
+        input[type="submit"] {
+            background-color: #00008B;
+            font-family: Andale Mono, monospace;
+            color: #FFFFFF;
+            font-size: 20px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover{
+            background-color: #f1f1f1;
+            color: black;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="login-box">
+        <h1>Login</h1>
+        {% if error_message %}
+            <p>{{ error_message }}</p>
+        {% endif %}
+
+        <form action="/login" method="POST">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required><br><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required><br><br>
+            <input type="submit" value="Login">
+        </form>
+        <br><br><br>
+        <p>Don't have an account? <a href="/register" style="text-decoration:none">Register here</a></p>
+    </div>
+</body>
+</html>

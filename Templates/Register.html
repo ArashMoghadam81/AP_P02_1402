@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+    <style>
+        #container {
+            margin: 0 auto;
+            max-width: 500px;
+            border: 1px solid #ccc;
+            padding: 20px;
+            background-color: #336699;
+            border-radius: 50px
+        }
+        
+        p {
+            border: 0.01px solid black;
+            border-radius: 5px;
+            margin-top: 5px;
+            margin-bottom: 50px;
+            margin-right: 100px;
+            margin-left: 100px;
+            background-color: #FFFFFF;
+            background-attachment: fixed;
+        }
+        
+        body {
+            text-align: center;
+            padding: 50px;
+            background-color: #F8F8FF;
+        }
+        
+        h1 {
+            font-size: 50px;
+            color: #FFF5EE;
+        }
+        
+        label[for="username"] {
+            font-family: Andale Mono, monospace;
+            color: #FFFFFF;
+            font-size: 20px;
+        }
+        
+        label[for="password"] {
+            font-family: Andale Mono, monospace;
+            color: #FFFFFF;
+            font-size: 20px;
+        }
+        
+        label[for="role"] {
+            font-family: Andale Mono, monospace;
+            color: #FFFFFF;
+            font-size: 20px;
+        }
+        
+        input[type="submit"] {
+            background-color: #00008B;
+            color: #FFF;
+            font-size: 20px;
+            padding: 10px;
+            font-family: Andale Mono, monospace;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }      
+        select {
+            background-color: #00008B;
+            color: #FFF;
+            font-size: 20px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-family: Andale Mono, monospace;
+        }
+        input[type="submit"]:hover{
+            background-color: #f1f1f1;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>Register</h1>
+        <form action="/register" method="POST">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required><br><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required><br><br>
+            <label for="role">Role:</label>
+            <select id="role" name="role" required>
+                <option value="buyer">Buyer</option>
+                <option value="seller">Seller</option>
+            </select><br><br>
+            <input type="submit" value="Register">
+        </form>
+        <br><br>
+        <p>Already have an account? <a href="/login" style="text-decoration:none">Login here</a>.</p>
+    </div>
+</body>
+</html>
