@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Dashboard</h1>
+    {% if role == 'seller' %}
+        <a href="/seller_dashboard">Go to Seller Dashboard</a>
+    {% elif role == 'buyer' %}
+        <a href="/buyer_dashboard">Go to Buyer Dashboard</a>
+    {% endif %}
+    <br>
+    <br>
+    <a href="/logout">Logout</a>
+</body>
+</html>
