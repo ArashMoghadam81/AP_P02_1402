@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Seller Dashboard</title>
+    <style>
+        #box {
+            margin: 40px auto;
+            max-width: 800px;
+            border: 2px solid white;
+            padding: 20px;
+            background-color: #336699;
+            border-radius: 100px;
+        }
+        .content {
+            margin-top: 20px;
+        }
+        body {
+            padding-top: 40px;
+            text-align: center;
+            background-color: #F8F8FF;
+            color: #FFFFFF;
+        }
+        .navbar {
+            position: fixed;
+            font-family: Georgia, serif;
+            top: 0;
+            left: 0;
+            width: 100%;
+            font-family: Georgia, serif;
+            background-color: #f1f1f1;
+            overflow: hidden;
+        }
+        .navbar a {
+            float: left;
+            font-family: Georgia, serif;
+            display: block;
+            color: #333;
+            text-align: center;
+            font-family: Georgia, serif;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        .navbar a.right {
+            float: right;
+            font-family: Georgia, serif;
+        }
+        .navbar a:hover {
+            background-color: #333;
+            color: white;
+        }
+        .product-image {
+            width: 250px;
+            height: 250px;
+            margin-left: 1px;
+            margin-right: auto;
+            border: 3px solid white;
+            border-radius: 50px;
+        }
+        .product-container {
+            display: flex;
+            flex-direction: row;
+            margin-left: 250px;
+            margin-right: 250px;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 50px;
+            background-color: #336699;
+            border-color: #00008B;
+            border-width: 5px;
+        }
+        .product-details {
+            display: flex;
+            flex-direction: column;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: auto;
+            margin-top: auto;
+            color: black;
+        }
+        .product-name-box {
+            background-color: #00008B;
+            padding: 10px;
+            width: 550px;
+            height: 20px;
+            margin-bottom: 10px;
+            margin-left: -75px;
+            border-radius: 25px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+       
+        .product-name { 
+            font-size: 20px;
+            color: #FFFFFF;
+            font-family: Andale Mono, monospace;
+            text-align: left;
+            width: 100%;
+        }
+         .product-price-box {
+            background-color: #00008B;
+            padding: 10px;
+            width: 550px;
+            height: 45px;
+            margin-left: 150px;
+            border-radius: 25px;
+            overflow: hidden;
+            margin-left: -75px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .product-price {
+            font-size: 20px;
+            color: #FFFFFF;
+            font-family: Andale Mono, monospace;
+            text-align: left;
+            width: 100%;
+        }
+        input[type="submit"] {
+            background-color: #00008B;
+            color: #FFFFFF;
+            font-family: Andale Mono, monospace;
+            font-size: 20px;
+            padding: 10px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 20px;
+            margin-left: 400px;
+            margin-right: auto;
+        }
+        input[type="submit"]:hover{
+            background-color: #f1f1f1;
+            color: black;
+        }
+
+    
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a>Orang Shop</a>
+        <a href="/Add_product_seller">Add Product</a>
+        <a href="/logout" class="right">Logout</a>
+    </div>
+    <div class="content" id="box">
+        <h1>Seller Dashboard</h1>
+        <h2>Your Products</h2>
+    </div>
+    {% for product in products %}
+    <div class="product-container">
+        <img class="product-image" src="\static\uploads\{{product.image}}" alt="Product Image">
+        <div class="product-details">
+            <div class="product-name-box">
+                <div class="product-name">Name:   {{ product.name }}</div>
+            </div>
+            <div class="product-price-box">
+                <br>
+                <div class="product-price">Price:   {{ product.price }} $ | {{product.gheymat}} IRR</div>
+            </div>
+            <form action="/remove_product_seller/{{ product.name }}" method="post">
+                <input type="submit" value="Remove">
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+</body>
+</html>
